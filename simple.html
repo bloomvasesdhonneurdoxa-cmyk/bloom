@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription Simple</title>
+<style>
+body { 
+    font-family:'Segoe UI', sans-serif; 
+    background: url('djees.jpg') no-repeat center center/cover; 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    height:100vh; 
+    margin:0;
+}
+
+.container { 
+    background: rgba(255,255,255,0.95); 
+    padding: 40px 30px; 
+    border-radius: 20px; 
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2); 
+    width: 90%;
+    max-width: 400px;
+    text-align:center;
+}
+
+h2 { 
+    margin-bottom: 25px; 
+    color: #007BFF; 
+    font-size: 26px;
+}
+
+label { 
+    display:block; 
+    margin-top:15px; 
+    font-weight:600; 
+    text-align:left;
+    color: #333;
+}
+
+input { 
+    width:100%; 
+    padding:14px; 
+    margin-top:5px; 
+    border-radius:10px; 
+    border:1px solid #ccc; 
+    font-size:16px;
+    transition: all 0.3s;
+}
+
+input:focus { 
+    border-color: #007BFF; 
+    box-shadow: 0 0 8px rgba(0,123,255,0.3); 
+    outline:none;
+}
+
+button { 
+    margin-top:25px; 
+    width:100%; 
+    padding:16px; 
+    border:none; 
+    border-radius:12px; 
+    background:#007BFF; 
+    color:#fff; 
+    font-weight:700; 
+    font-size:17px; 
+    cursor:pointer;
+    transition: all 0.3s;
+}
+
+button:hover { 
+    background:#0056b3; 
+    transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Inscription Simple</h2>
+
+<form action="https://formsubmit.co/bloomvasesdhonneurdoxa@gmail.com" method="POST">
+    <label>Nom et Prénom :</label>
+    <input type="text" name="nom" required>
+
+    <label>Email :</label>
+    <input type="email" name="email" required>
+
+    <label>Téléphone :</label>
+    <input type="text" name="telephone" required>
+
+    <input type="hidden" name="_next" value="merci.html">
+
+    <button type="submit">Envoyer</button>
+</form>
+
+</div>
+</body>
+</html>

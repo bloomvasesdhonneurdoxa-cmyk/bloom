@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paiement</title>
+<style>
+body {
+    font-family:'Segoe UI';
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+    padding:0;
+
+    /* Image de fond */
+    background: url('djees.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.container {
+    background: rgba(255,255,255,0.95); /* semi-transparent pour lisibilité */
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    width:100%;
+    max-width:400px;
+    text-align:center;
+}
+
+h2 { margin-bottom:20px; color:#000; }
+
+.moyen {
+    background:#007BFF;
+    color:#fff;
+    padding:15px;
+    margin:10px 0;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    transition:all 0.3s;
+}
+
+.moyen:hover { background:#0056b3; }
+
+#instruction { margin-top:20px; font-weight:600; }
+
+p { margin:10px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Paiement</h2>
+<p id="montant"></p>
+
+<div class="moyen" onclick="payer('Wave')">Wave</div>
+<div class="moyen" onclick="payer('Orange Money')">Orange Money</div>
+<p id="instruction"></p>
+</div>
+
+<script>
+// Récupérer le montant depuis l'URL
+const urlParams = new URLSearchParams(window.location.search);
+const montant = urlParams.get('montant');
+document.getElementById('montant').textContent = "Montant à payer : " + montant + " CFA";
+
+// Numéros de paiement pour tous les opérateurs
+const numerosPaiement = {
+    "Wave": "0749389074",
+    "Orange Money": "0749389074",
+
+};
+
+function payer(moyen){
+    const numero = numerosPaiement[moyen];
+    let url = "";
+    switch(moyen){
+        case "Wave":
+            url = `wave://pay?recipient=${numero}&amount=${montant}`;
+            break;
+        case "Orange Money":
+            url = `om://pay?recipient=${numero}&amount=${montant}`; // vérifier selon app
+            break;
+        default:
+            alert("Application de paiement non supportée");
+            return;
+    }
+    // Redirection vers l'application
+    window.location.href = url;
+
+    // Instruction au cas où l'application ne s'ouvre pas
+    document.getElementById('instruction').innerHTML = 
+        "Si l'application ne s'ouvre pas, envoyez <b>" + montant + " CFA</b> au numéro <b>" + numero + "</b> via " + moyen + ".";
+}
+</script>
+</body>
+</html>
