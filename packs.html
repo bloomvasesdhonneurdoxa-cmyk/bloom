@@ -5,86 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscription Packs</title>
 <style>
-body { 
-    font-family:'Segoe UI', sans-serif; 
-    background: url('djees.jpg') no-repeat center center/cover; 
-    display:flex; justify-content:center; align-items:center; height:100vh; margin:0;
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: url('djees.jpg') no-repeat center center/cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
 }
-
-.container { 
-    background: rgba(255,255,255,0.95); padding:40px 30px; border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,0.2); 
-    width:90%; max-width:400px; text-align:center;
+.container {
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align:center;
 }
-
-h2 { margin-bottom:25px; color:#007BFF; font-size:26px; }
-
-label, p { display:block; margin-top:15px; font-weight:600; text-align:left; color:#333; }
-
-input, select { width:100%; padding:14px; margin-top:5px; border-radius:10px; border:1px solid #ccc; font-size:16px; transition: all 0.3s; }
-
-input:focus, select:focus { border-color: #007BFF; box-shadow:0 0 8px rgba(0,123,255,0.3); outline:none; }
-
-button { margin-top:25px; width:100%; padding:16px; border:none; border-radius:12px; background:#007BFF; color:#fff; font-weight:700; font-size:17px; cursor:pointer; transition: all 0.3s; }
-
-button:hover { background:#0056b3; transform: translateY(-2px); }
-
-.pack-container { display:flex; gap:15px; margin-top:15px; flex-wrap:wrap; }
-.pack { flex:1 1 45%; background:#fff; padding:20px; border-radius:12px; text-align:center; cursor:pointer; font-weight:600; transition:all 0.3s; border:2px solid transparent; }
-.pack:hover { border-color:#3399FF; transform:translateY(-3px);}
-.pack.active { border-color:#007BFF; box-shadow:0 4px 15px rgba(0,0,0,0.2); }
+h2 { margin-bottom: 20px; color: #007BFF; }
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #007BFF;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover { background: #0056b3; }
+.pack-container {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    margin-top:15px;
+}
+.pack {
+    flex:1 1 45%;
+    padding:15px;
+    background:#fff;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    border:2px solid transparent;
+    transition:0.3s;
+    text-align:center;
+}
+.pack:hover { border-color:#3399FF; transform:translateY(-2px);}
+.pack.active { border-color:#007BFF; box-shadow:0 4px 12px rgba(0,0,0,0.2);}
 </style>
 </head>
 <body>
 <div class="container">
-<h2>Inscription Packs</h2>
+<h2>Choisissez un Pack</h2>
 
-<form id="packsForm" action="https://formsubmit.co/bloomvasesdhonneurdoxa@gmail.com" method="POST">
-    <label>Nom et Prénom :</label>
-    <input type="text" name="nom" required>
+<form id="packForm" action="https://formsubmit.co/bloomvasesdhonneurdoxa@gmail.com" method="POST">
+<input type="text" name="nom" placeholder="Nom et Prénom" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="text" name="telephone" placeholder="Téléphone" required>
 
-    <label>Email :</label>
-    <input type="email" name="email" required>
+<input type="hidden" name="pack" id="packHidden" required>
+<input type="hidden" name="_next" id="nextInput" value="paiement.html?montant=10000">
 
-    <label>Téléphone :</label>
-    <input type="text" name="telephone" required>
+<div class="pack-container">
+    <div class="pack" data-pack="10000">Pack 10 000 CFA</div>
+    <div class="pack" data-pack="15000">Pack 15 000 CFA</div>
+    <div class="pack" data-pack="20000">Pack 20 000 CFA</div>
+    <div class="pack" data-pack="50000">Pack 50 000 CFA</div>
+</div>
 
-    <p>Choisissez un pack :</p>
-    <div class="pack-container">
-        <div class="pack" data-pack="10000">Pack 10 000 CFA</div>
-        <div class="pack" data-pack="15000">Pack 15 000 CFA</div>
-        <div class="pack" data-pack="20000">Pack 20 000 CFA</div>
-        <div class="pack" data-pack="50000">Pack 50 000 CFA</div>
-    </div>
-
-    <input type="hidden" name="pack" id="packHidden" required>
-    <!-- Redirection temporaire vers la page de paiement -->
-    <input type="hidden" name="_next" id="nextUrl" value="">
-
-    <button type="submit">Continuer vers le paiement</button>
+<button type="button" id="submitPack">Envoyer et passer au paiement</button>
 </form>
 </div>
 
 <script>
 const packs = document.querySelectorAll('.pack');
 const packHidden = document.getElementById('packHidden');
-const form = document.getElementById('packsForm');
-const nextUrl = document.getElementById('nextUrl');
+const nextInput = document.getElementById('nextInput');
+const form = document.getElementById('packForm');
 
 packs.forEach(p => {
     p.addEventListener('click', () => {
-        packs.forEach(x => x.classList.remove('active'));
+        packs.forEach(x=>x.classList.remove('active'));
         p.classList.add('active');
         packHidden.value = p.dataset.pack;
-        // On envoie le montant choisi à la page de paiement
-        nextUrl.value = `paiement.html?montant=${p.dataset.pack}`;
+        nextInput.value = "paiement.html?montant=" + p.dataset.pack;
     });
 });
 
-form.addEventListener('submit', e => {
-    if(!packHidden.value){
-        e.preventDefault();
-        alert("Veuillez choisir un pack avant de continuer.");
-    }
+document.getElementById('submitPack').addEventListener('click', ()=>{
+    if(!packHidden.value){ alert("Veuillez choisir un pack"); return; }
+    form.submit();
 });
 </script>
 </body>

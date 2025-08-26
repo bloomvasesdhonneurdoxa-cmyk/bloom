@@ -6,31 +6,25 @@
 <title>Paiement</title>
 <style>
 body {
-    font-family:'Segoe UI';
+    font-family:'Segoe UI', sans-serif;
+    background: url('djees.jpg') no-repeat center center/cover;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    min-height:100vh;
     margin:0;
-    padding:0;
-
-    /* Image de fond */
-    background: url('djees.jpg') no-repeat center center fixed;
-    background-size: cover;
 }
-
 .container {
-    background: rgba(255,255,255,0.95); /* semi-transparent pour lisibilité */
-    padding:40px;
-    border-radius:15px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.2);
-    width:100%;
-    max-width:400px;
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 400px;
     text-align:center;
 }
-
-h2 { margin-bottom:20px; color:#000; }
-
+h2 { color:#007BFF; margin-bottom:20px; }
+.montant { font-weight:600; margin-bottom:15px; font-size:18px; }
 .moyen {
     background:#007BFF;
     color:#fff;
@@ -39,38 +33,53 @@ h2 { margin-bottom:20px; color:#000; }
     border-radius:10px;
     cursor:pointer;
     font-weight:600;
-    transition:all 0.3s;
+    font-size:16px;
+    transition:0.3s;
 }
-
 .moyen:hover { background:#0056b3; }
-
-#instruction { margin-top:20px; font-weight:600; }
-
-p { margin:10px 0; }
+#instruction { margin-top:20px; font-weight:600; color:#333; }
+button#finaliser {
+    margin-top:15px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#28a745;
+    color:#fff;
+    font-weight:600;
+    font-size:16px;
+    cursor:pointer;
+    display:none;
+}
+button#finaliser:hover { background:#218838; }
 </style>
 </head>
 <body>
 <div class="container">
 <h2>Paiement</h2>
-<p id="montant"></p>
+<p class="montant" id="montant">Montant : 0 CFA</p>
 
 <div class="moyen" onclick="payer('Wave')">Wave</div>
 <div class="moyen" onclick="payer('Orange Money')">Orange Money</div>
+
 <p id="instruction"></p>
+<button id="finaliser">Finaliser</button>
 </div>
 
 <script>
 // Récupérer le montant depuis l'URL
 const urlParams = new URLSearchParams(window.location.search);
-const montant = urlParams.get('montant');
+const montant = urlParams.get('montant') || "0";
 document.getElementById('montant').textContent = "Montant à payer : " + montant + " CFA";
 
-// Numéros de paiement pour tous les opérateurs
+// Numéros de paiement
 const numerosPaiement = {
     "Wave": "0749389074",
-    "Orange Money": "0749389074",
-
+    "Orange Money": "0749389074"
 };
+
+const finaliserBtn = document.getElementById('finaliser');
+const instruction = document.getElementById('instruction');
 
 function payer(moyen){
     const numero = numerosPaiement[moyen];
@@ -80,19 +89,26 @@ function payer(moyen){
             url = `wave://pay?recipient=${numero}&amount=${montant}`;
             break;
         case "Orange Money":
-            url = `om://pay?recipient=${numero}&amount=${montant}`; // vérifier selon app
+            url = `om://pay?recipient=${numero}&amount=${montant}`;
             break;
         default:
             alert("Application de paiement non supportée");
             return;
     }
-    // Redirection vers l'application
+    // Redirection vers l'app
     window.location.href = url;
 
-    // Instruction au cas où l'application ne s'ouvre pas
-    document.getElementById('instruction').innerHTML = 
-        "Si l'application ne s'ouvre pas, envoyez <b>" + montant + " CFA</b> au numéro <b>" + numero + "</b> via " + moyen + ".";
+    // Instructions si l'app ne s'ouvre pas
+    instruction.innerHTML = `Vous avez choisi <b>${moyen}</b>.<br>
+        Si l'application ne s'ouvre pas, envoyez <b>${montant} CFA</b> au numéro <b>${numero}</b>.`;
+
+    finaliserBtn.style.display="block";
 }
+
+// Redirection finale vers merci.html
+finaliserBtn.addEventListener('click', ()=>{
+    window.location.href = "merci.html";
+});
 </script>
 </body>
 </html>

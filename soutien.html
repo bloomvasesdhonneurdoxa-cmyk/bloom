@@ -5,60 +5,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscription Soutien</title>
 <style>
-body { 
-    font-family:'Segoe UI', sans-serif; 
-    background: url('djees.jpg') no-repeat center center/cover; 
-    display:flex; justify-content:center; align-items:center; height:100vh; margin:0;
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: url('djees.jpg') no-repeat center center/cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
 }
-.container { 
-    background: rgba(255,255,255,0.95); padding:40px 30px; border-radius:20px; box-shadow:0 12px 30px rgba(0,0,0,0.2); 
-    width:90%; max-width:400px; text-align:center;
+.container {
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align:center;
 }
-h2 { margin-bottom:25px; color:#007BFF; font-size:26px; }
-label, p { display:block; margin-top:15px; font-weight:600; text-align:left; color:#333; }
-input, select { width:100%; padding:14px; margin-top:5px; border-radius:10px; border:1px solid #ccc; font-size:16px; transition: all 0.3s; }
-input:focus, select:focus { border-color: #007BFF; box-shadow:0 0 8px rgba(0,123,255,0.3); outline:none; }
-button { margin-top:25px; width:100%; padding:16px; border:none; border-radius:12px; background:#007BFF; color:#fff; font-weight:700; font-size:17px; cursor:pointer; transition: all 0.3s; }
-button:hover { background:#0056b3; transform: translateY(-2px); }
-.radio-group { margin-top:10px; text-align:left; }
+h2 { margin-bottom:20px; color:#007BFF; }
+input, select {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+button {
+    margin-top:20px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#007BFF;
+    color:#fff;
+    font-weight:600;
+    font-size:16px;
+    cursor:pointer;
+}
+button:hover { background:#0056b3; }
+.radio-group { text-align:left; margin-top:10px; }
 </style>
 </head>
 <body>
 <div class="container">
-<h2>Inscription Soutien</h2>
+<h2>Soutenir</h2>
 
 <form id="soutienForm" action="https://formsubmit.co/bloomvasesdhonneurdoxa@gmail.com" method="POST">
-    <label>Nom et Prénom :</label>
-    <input type="text" name="nom" required>
+<input type="text" name="nom" placeholder="Nom et Prénom" required>
+<input type="email" name="email" placeholder="Email" required>
+<input type="text" name="telephone" placeholder="Téléphone" required>
 
-    <label>Email :</label>
-    <input type="email" name="email" required>
+<p>Type de soutien :</p>
+<div class="radio-group">
+    <input type="radio" name="typeSoutien" value="libre" id="libre" checked> Soutien libre
+    <input type="radio" name="typeSoutien" value="vetement" id="vetement"> Soutien avec vêtement
+</div>
 
-    <label>Téléphone :</label>
-    <input type="text" name="telephone" required>
+<div id="montantLibreDiv">
+<input type="number" name="montantLibre" min="100" value="1000" placeholder="Montant libre (CFA)">
+</div>
 
-    <label>Type de soutien :</label>
-    <div class="radio-group">
-        <input type="radio" name="typeSoutien" value="libre" id="libre" checked> Soutenir librement
-        <input type="radio" name="typeSoutien" value="vetement" id="vetement"> Soutenir avec un vêtement
-    </div>
+<div id="vetementDiv" style="display:none;">
+<select name="vetementOption">
+<option value="tshirt">T-shirt 6 000 CFA</option>
+<option value="pull">Pull 15 000 CFA</option>
+</select>
+</div>
 
-    <div id="montantLibreDiv">
-        <label>Montant libre (CFA) :</label>
-        <input type="number" name="montantLibre" min="100" value="1000">
-    </div>
+<input type="hidden" name="_next" id="nextInput" value="paiement.html?montant=1000">
 
-    <div id="vetementDiv" style="display:none;">
-        <label>Choisissez un vêtement :</label>
-        <select name="vetementOption">
-            <option value="tshirt">T-shirt 6 000 CFA</option>
-            <option value="pull">Pull 15 000 CFA</option>
-        </select>
-    </div>
-
-    <input type="hidden" name="_next" id="nextUrl" value="">
-
-    <button type="submit">Continuer vers le paiement</button>
+<button type="button" id="submitSoutien">Envoyer et passer au paiement</button>
 </form>
 </div>
 
@@ -68,29 +86,25 @@ const vetementRadio = document.getElementById('vetement');
 const montantLibreDiv = document.getElementById('montantLibreDiv');
 const vetementDiv = document.getElementById('vetementDiv');
 const form = document.getElementById('soutienForm');
-const nextUrl = document.getElementById('nextUrl');
+const nextInput = document.getElementById('nextInput');
+
+function toggleSoutien(){
+    if(libreRadio.checked){ montantLibreDiv.style.display="block"; vetementDiv.style.display="none"; }
+    else { montantLibreDiv.style.display="none"; vetementDiv.style.display="block"; }
+}
 
 libreRadio.addEventListener('change', toggleSoutien);
 vetementRadio.addEventListener('change', toggleSoutien);
 
-function toggleSoutien(){
-    if(libreRadio.checked){
-        montantLibreDiv.style.display="block";
-        vetementDiv.style.display="none";
-    } else {
-        montantLibreDiv.style.display="none";
-        vetementDiv.style.display="block";
-    }
-}
-
-form.addEventListener('submit', e => {
+document.getElementById('submitSoutien').addEventListener('click', ()=>{
     let montant = 0;
-    if(libreRadio.checked){
+    if(libreRadio.checked){ 
         montant = form.montantLibre.value || 1000;
     } else {
         montant = form.vetementOption.value === "tshirt" ? 6000 : 15000;
     }
-    nextUrl.value = `paiement.html?montant=${montant}`;
+    nextInput.value = "paiement.html?montant=" + montant;
+    form.submit();
 });
 </script>
 </body>
