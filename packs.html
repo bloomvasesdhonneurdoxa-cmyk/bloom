@@ -96,6 +96,7 @@ const packHidden = document.getElementById('packHidden');
 const nextInput = document.getElementById('nextInput');
 const form = document.getElementById('packForm');
 
+// Gestion de la sélection du pack
 packs.forEach(p => {
     p.addEventListener('click', () => {
         packs.forEach(x=>x.classList.remove('active'));
@@ -105,9 +106,20 @@ packs.forEach(p => {
     });
 });
 
+// Soumission FormSubmit et redirection
 document.getElementById('submitPack').addEventListener('click', ()=>{
     if(!packHidden.value){ alert("Veuillez choisir un pack"); return; }
-    form.submit();
+    // soumission via FormSubmit
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    }).then(()=>{
+        // redirection vers paiement
+        window.location.href = nextInput.value;
+    }).catch(err=>{
+        console.error(err);
+        alert("Erreur lors de l'envoi du formulaire.");
+    });
 });
 </script>
 </body>

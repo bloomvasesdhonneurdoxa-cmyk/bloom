@@ -89,10 +89,14 @@ const form = document.getElementById('soutienForm');
 const nextInput = document.getElementById('nextInput');
 
 function toggleSoutien(){
-    if(libreRadio.checked){ montantLibreDiv.style.display="block"; vetementDiv.style.display="none"; }
-    else { montantLibreDiv.style.display="none"; vetementDiv.style.display="block"; }
+    if(libreRadio.checked){ 
+        montantLibreDiv.style.display="block"; 
+        vetementDiv.style.display="none"; 
+    } else { 
+        montantLibreDiv.style.display="none"; 
+        vetementDiv.style.display="block"; 
+    }
 }
-
 libreRadio.addEventListener('change', toggleSoutien);
 vetementRadio.addEventListener('change', toggleSoutien);
 
@@ -104,7 +108,17 @@ document.getElementById('submitSoutien').addEventListener('click', ()=>{
         montant = form.vetementOption.value === "tshirt" ? 6000 : 15000;
     }
     nextInput.value = "paiement.html?montant=" + montant;
-    form.submit();
+
+    // Soumission via fetch pour éviter page intermédiaire FormSubmit
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    }).then(()=>{
+        window.location.href = nextInput.value;
+    }).catch(err=>{
+        console.error(err);
+        alert("Erreur lors de l'envoi du formulaire.");
+    });
 });
 </script>
 </body>
